@@ -10,7 +10,7 @@ const Body = () => {
   const [searchText, setSearchText] = useState("");
 
   // Whenever state variables update, react triggers a reconciliation cycle(re-renders the component)
-  console.log("Body Rendered");
+  // console.log("Body Rendered");
 
   useEffect(() => {
     fetchData();
@@ -18,21 +18,17 @@ const Body = () => {
 
   const fetchData = async () => {
     const data = await fetch(
-      "https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9351929&lng=77.62448069999999&page_type=DESKTOP_WEB_LISTING"
+      "https://corsproxy.io/https://www.swiggy.com/dapi/restaurants/search/v3?lat=18.9690247&lng=72.8205292&str=mumbai&trackingId=undefined&submitAction=ENTER&queryUniqueId=0337bbe6-d2e9-acee-b486-cc1d2564c72e&selectedPLTab=RESTAURANT"
     );
 
     const json = await data.json();
-
+    const dataCard = json.data.cards[0]?.groupedCard?.cardGroupMap?.RESTAURANT?.cards;
     // Optional Chaining
-    setListOfRestraunt(
-      json?.data?.cards[5]?.card?.card?.gridElements?.infoWithStyle?.restaurants
-    );
-    setFilteredRestaurant(
-      json?.data?.cards[5]?.card?.card?.gridElements?.infoWithStyle?.restaurants
-    );
+    setListOfRestraunt(dataCard);
+    setFilteredRestaurant(dataCard);
   };
 
-  return listOfRestaurants.length === 0 ? (
+  return listOfRestaurants?.length === 0 ? (
     <Shimmer />
   ) : (
     <div className="body">
@@ -50,10 +46,10 @@ const Body = () => {
             onClick={() => {
               // Filter the restraunt cards and update the UI
               // searchText
-              console.log(searchText);
+              // console.log(searchText);
 
               const filteredRestaurant = listOfRestaurants.filter((res) =>
-                res.data.name.toLowerCase().includes(searchText.toLowerCase())
+                res.card.card.info.name.toLowerCase().includes(searchText.toLowerCase())
               );
 
               setFilteredRestaurant(filteredRestaurant);
@@ -66,9 +62,13 @@ const Body = () => {
           className="filter-btn"
           onClick={() => {
             const filteredList = listOfRestaurants.filter(
-              (res) => res.data.avgRating > 4
+              (res) => {
+                return res.card.card.info.avgRating > 4.5
+              }
             );
-            setListOfRestraunt(filteredList);
+            setFilteredRestaurant(filteredList);
+            
+
           }}
         >
           Top Rated Restaurants
@@ -76,7 +76,7 @@ const Body = () => {
       </div>
       <div className="res-container">
         {filteredRestaurant.map((restaurant) => (
-          <RestaurantCard key={restaurant.info.id} resData={restaurant} />
+          <RestaurantCard key={restaurant.card.card.info.id} resData={restaurant} />
         ))}
       </div>
     </div>
