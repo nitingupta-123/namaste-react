@@ -11,20 +11,20 @@ const Header = () => {
   const onlineStatus = useOnlineStatus();
 
   return (
-    <div className="header">
+    <div className="flex justify-between items-center border-b border-gray-300 shadow-md px-4 py-2">
       <div className="logo-container">
-        <img className="logo" src={LOGO_URL} />
+        <img className="w-48 h-16 object-contain" src={LOGO_URL} alt="Logo" />
       </div>
       <div className="nav-items">
-        <ul>
-          <li>Online Status: {onlineStatus===true ? "✅" : "❌"}</li>
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/about">About Us</Link></li>
-          <li><Link to="/contact">Contact Us</Link></li>
-          <li>Cart</li>
-          <li><Link to="/grocery">Grocery</Link></li>
+        <ul className="flex items-center list-none text-xl gap-4">
+          <li className="px-2 py-2">Online Status: {onlineStatus===true ? "✅" : "❌"}</li>
+          <li className="px-2 py-2 hover:text-blue-600 transition-colors"><Link to="/">Home</Link></li>
+          <li className="px-2 py-2 hover:text-blue-600 transition-colors"><Link to="/about">About Us</Link></li>
+          <li className="px-2 py-2 hover:text-blue-600 transition-colors"><Link to="/contact">Contact Us</Link></li>
+          <li className="px-2 py-2 hover:text-blue-600 transition-colors cursor-pointer">Cart</li>
+          <li className="px-2 py-2 hover:text-blue-600 transition-colors"><Link to="/grocery">Grocery</Link></li>
           <button
-            className="login"
+            className="px-5 py-2 cursor-pointer bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-semibold"
             onClick={() => {
               btnNameReact === "Login"
                 ? setBtnNameReact("Logout")

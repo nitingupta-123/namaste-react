@@ -10,7 +10,7 @@ import { RestaurantMenu } from "./components/RestaurantMenu";
 
 const AppLayout = () => {
   return (
-    <div className="app">
+    <div className="app min-h-screen bg-gray-50">
       <Header />
       <Outlet/>
     </div>
