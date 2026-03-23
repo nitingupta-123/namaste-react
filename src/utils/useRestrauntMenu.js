@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { RESTAURANT_MENU_API } from "./constants";
 
 export const useRestrauntMenu = (resId) =>{
     // alert(resId);
@@ -9,7 +10,7 @@ export const useRestrauntMenu = (resId) =>{
 
     const fetchMenu = async(resId)=>{
         const data = await fetch( 
-            `https://www.swiggy.com/mapi/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=22.56430&lng=88.36930&restaurantId=${resId}`
+            `${RESTAURANT_MENU_API}${resId}`
         );
         console.log("data",data);
         const json = await data.json();

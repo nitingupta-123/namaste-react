@@ -1,7 +1,8 @@
-import RestaurantCard from "./RestaurantCard";
+import RestaurantCard, { withPromotedLabel } from "./RestaurantCard";
 import { useState, useEffect } from "react";
 import Shimmer from "./Shimmer";
 import { Link } from "react-router-dom";
+import { RESTAURANT_SEARCH_API } from "../utils/constants";
 
 
 const Body = () => {
@@ -11,6 +12,8 @@ const Body = () => {
 
   const [searchText, setSearchText] = useState("");
 
+  const PromotedRestaurantCard = withPromotedLabel(RestaurantCard);
+
   // Whenever state variables update, react triggers a reconciliation cycle(re-renders the component)
   // console.log("Body Rendered");
 
@@ -19,14 +22,13 @@ const Body = () => {
   }, []);
 
   const fetchData = async () => {
-    const data = await fetch(
-      "https://corsproxy.io/https://www.swiggy.com/dapi/restaurants/search/v3?lat=22.56430&lng=88.36930&str=mumbai&trackingId=undefined&submitAction=ENTER&queryUniqueId=0337bbe6-d2e9-acee-b486-cc1d2564c72e&selectedPLTab=RESTAURANT"
-    );
+    const data = await fetch(RESTAURANT_SEARCH_API);
 
     const json = await data.json();
     const dataCard = json.data.cards[0]?.groupedCard?.cardGroupMap?.RESTAURANT?.cards;
     // Optional Chaining
     setListOfRestraunt(dataCard);
+    console.log("dataCard",dataCard);
     setFilteredRestaurant(dataCard);
   };
 
@@ -82,7 +84,11 @@ const Body = () => {
         {filteredRestaurant.map((restaurant) => (
           <Link key={restaurant.card.card.info.id}
           to={`/restaurant/${restaurant.card.card.info.id}`}>
-            <RestaurantCard key={restaurant.card.card.info.id} resData={restaurant} />
+            {restaurant?.card?.card?.info?.promoted?(
+              <PromotedRestaurantCard key={restaurant.card.card.info.id} resData={restaurant} />
+            ):(
+              <RestaurantCard key={restaurant.card.card.info.id} resData={restaurant} />
+            )}
           </Link>
         ))}
       </div>
